@@ -1,0 +1,80 @@
+
+function Ass() { //Boy..  The possibilities of a class named "Ass"...
+    this.rules = [];   
+}
+
+Ass.prototype.parseCSS = function(css) {
+    var allCSS = "";
+    var lines = css.split("\n");
+    
+    for(var i=0, max=lines.length; i < max; i++) {
+        var line = lines[i].replace(/^\s+|\s+$/g, '');
+        
+        var pieces = line.split(" ");
+        
+        if(pieces[0] === "rule") { //It's a new rule declaration
+               var newRuleLines = [line];
+               
+                var foundClose = (line.indexOf("}")) ? true : false;
+                while(!foundClose) {
+                       i++;
+                       var curLine = lines[i].replace(/^\s+|\s+$/g, '');
+                       
+                       newRuleLines.push(curLine);
+                       
+                       foundClose = (curLine.indexOf("}")) ? true : false;
+                }
+                
+                this.makeNewRule(newRuleLines);
+                
+        } else if(line.indexOf(":")) { //It's a regular CSS line, so we should parse it!
+            allCSS += this.parseLine(line);
+        } else { //Nothing interesting here, move along.
+            allCSS += line;
+        }
+    }
+};
+
+Ass.prototype.makeNewRule = function(lines) {
+    var openPos = lines[0].indexOf("{");
+    
+    var declaration = lines[0].substr(0, openPos);
+    var decPieces = declaration.split(" ");
+    
+    var rule = {
+        name: decPieces[1]   
+    };
+    
+    lines[0] = lines[0].substr(openPos); //Get rid of the declaration, because it's not important now.
+    
+    rule.css = "";
+    for(var i=0, max=lines.length; i<max; i++) {
+           rule.css += this.parseLine(line) + "\n";
+    }
+    
+    this.rules.push(rule);
+};
+
+Ass.prototype.parseLine = function(line) {
+    var cssLine = "";
+    
+    line = line.replace(/[{}]/g, "");
+    
+    var rules = line.split(";"); //Because some people put tons of CSS rules on one line
+    
+    for(var i=0, max=rules.length; i<max; i++) {
+           var pieces = rules[i].split(":");
+           var css;
+           
+           if(this.isCustomRule(pieces[0])) {
+                css = this.ruleToCss(pieces[0], pieces[1]);
+           } else {
+                css = pieces[0] + ": " + pieces[1];
+           }
+           
+           cssLine += css + "\n";
+    }
+    
+    return cssLine;
+};
+
