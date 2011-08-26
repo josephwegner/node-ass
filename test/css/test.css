@@ -1,0 +1,15 @@
+rule custom {
+	color: %1;
+}
+
+#test {
+	custom: green;
+	color: #AEAEAE;
+}
+
+.hello {
+
+	float: left;
+	text-align: right;
+}
+.clear { clear: both: float: normal; }
