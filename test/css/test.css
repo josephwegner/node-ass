@@ -1,15 +1,21 @@
-rule custom {
+rule colorIt {
 	color: %1;
+	background-color: white;
+}
+rule hardAlign {
+	text-align: left;
+	float: left;
+	padding-left: 0;
+	margin-left: 0;
 }
 
 #test {
-	custom: green;
+	colorIt: green;
 	color: #AEAEAE;
 }
 
 .hello {
-
-	float: left;
-	text-align: right;
+	hardAlign: null;
 }
+
 .clear { clear: both: float: normal; }

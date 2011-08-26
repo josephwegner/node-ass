@@ -8,26 +8,23 @@ var Ass = { //Boy..  The possibilities of a class named "Ass"...
 	parseCSS: function(css) {
 	    var allCSS = "";
 	    var lines = css.split("\n");
-	    
 	for(var i=0, max=lines.length; i < max; i++) {
 		var line = lines[i].trim();
-		
 		var pieces = line.split(" ");
 		
-		if(pieces[0] === "rule") { //It's a new rule declaration
+		if(pieces[0] === "rule") { //It's a new rule declaratin
 		       var newRuleLines = [line];
 			var foundClose = (line.indexOf("}") !== -1) ? true : false;
-	
+			
 			while(!foundClose) {
 			       i++;
-			       var curLine = lines[i].trim();
 			       
-			       newRuleLines.push(curLine);
+				var curLine = lines[i].trim();
 			       
-			       foundClose = (curLine.indexOf("}")) ? true : false;
+				newRuleLines.push(curLine);
+			       
+			       foundClose = (curLine.indexOf("}") !== -1) ? true : false;
 			}
-			i++;
-	
 		
 			this.makeNewRule(newRuleLines);
 			
@@ -65,11 +62,11 @@ var Ass = { //Boy..  The possibilities of a class named "Ass"...
 	    
 	    rule.css = "";
 	    for(var i=0, max=lines.length; i<max; i++) {
-		   rule.css += this.parseLine(lines[i]) + "\n";
+		   rule.css += this.parseLine(lines[i]).trim() + "\n";
 	    }
 	    
 	    rule.css = rule.css.trim();
-
+	    
 	    this.rules.push(rule);
 	},
 
@@ -109,8 +106,9 @@ var Ass = { //Boy..  The possibilities of a class named "Ass"...
 
 		var rule = false;
 		var i=0;	
-		while(!rule) {
+		while(!rule & i < this.rules.length) {
 			if(this.rules[i].name === ruleName) rule = this.rules[i];
+			i++;
 		}
 		
 		var CSS = rule.css;
